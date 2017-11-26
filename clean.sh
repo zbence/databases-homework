@@ -1,4 +1,4 @@
-docker stop mysqlDB
+docker stop mysqldb
 docker stop node
 docker rm node
-docker rm mysqlDB
+docker rm mysqldb
