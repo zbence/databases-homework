@@ -115,9 +115,9 @@ function sayHello() {
     }});
 
 
-    
-
-
+    renderAtlagosKesesek();
+    renderJarmuMaxKeses();
+    renderJaratAtlagosFerohely();
 }
 
 function renderSoforok(soforArray){
@@ -133,8 +133,6 @@ function renderSoforok(soforArray){
 
         
     }
-    
-    
     
     htmlString += "<tr><td>"+"<button id=soforMent type='button'>Ment</button>"+
     "</td><td>"+"<input type='text' name='sofor.nev' placeholder='nev'>"+
@@ -241,4 +239,49 @@ function renderMegallok(megalloArray){
 
         htmlString += "</table>";
         $("#megalloList").html(htmlString);
+}
+
+
+function renderAtlagosKesesek(){
+
+    $.ajax({url:"keses/sofor/atlag", type: "GET", success: function(resp){
+
+        var jsonArray = JSON.parse(resp)
+        $("#atlagKeses").html("Atlagos keses:</br>")
+
+        for(var i=0; i< jsonArray.length; i++){
+            var obj = jsonArray[i];
+
+            $("#atlagKeses").append("<div>"+obj.sorszam+" "+obj.nev +":"+obj["AVG(m.keses)"]+"</div>")
+
+        }
+    }})
+}
+
+function renderJarmuMaxKeses() {
+
+    $.ajax({url:"keses/jarmu/max",type:"GET",success:function(resp){
+
+        var jsonArray = JSON.parse(resp);
+        $("#jarmuMaxKeses").html("Jarmu Szum keses: </br>");
+        console.log("Hello")
+        $("#jarmuMaxKeses").append("<div>"+jsonArray[0].rendszam+"  "+jsonArray[0]["SUM(m.keses)"]+"</div>")
+
+       
+    }})
+}
+
+function renderJaratAtlagosFerohely() {
+
+    $.ajax({url:"ferohely/atlag/jarat", type:"GET", success: function(resp){
+
+        var jsonArray = JSON.parse(resp);
+
+        $("#jaratAtlagosFerohely").html("Atlagos ferohelyszamok jaratokkent</br>");
+
+        for(var i =0; i<jsonArray.length; i++){
+            var obj = jsonArray[i]
+            $("#jaratAtlagosFerohely").append(obj.jaratszam+"  "+ obj["AVG(jar.ferohely)"]+ "</br>")
+        }
+    }})
 }

@@ -185,6 +185,45 @@ app.post("/megallo", function(req,resp){
      })
   })
 
+
+  app.get("/keses/sofor/atlag",function(req,resp) {
+
+    connection.query("SELECT s.sorszam,s.nev, AVG(m.keses) FROM sofor AS s, jarat AS j, megallo AS m  WHERE m.jaratszam = j.jaratszam AND j.sorszam = s.sorszam GROUP BY s.sorszam;", function(error, results,fields){
+
+      console.log(JSON.stringify(results))
+      resp.send(JSON.stringify(results));
+     })
+  })
+
+
+  app.get("/keses/jarmu/max",function(req,resp){
+
+    connection.query("SELECT * FROM (SELECT j.rendszam, SUM(m.keses) FROM jarmu AS j, megallo AS m, jarat AS jar WHERE m.jaratszam = jar.jaratszam AND j.rendszam = jar.rendszam GROUP BY j.rendszam ORDER BY SUM(m.keses) DESC)as a  LIMIT 1;", 
+  function(error, result, fields){
+
+    console.log(JSON.stringify(result))
+
+    resp.send(JSON.stringify(result))
+  })
+  })
+
+
+  app.get("/ferohely/atlag/jarat",function(req,resp){
+     
+     connection.query("SELECT j.jaratszam, AVG(jar.ferohely) FROM jarat AS j, jarmu AS jar WHERE j.rendszam = jar.rendszam GROUP BY j.jaratszam",
+    function(error,results,fields){
+
+
+      if (error){
+        resp.send(error)
+      }
+
+      resp.send(JSON.stringify(results))
+    })
+
+      
+    })
+
 connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
   if (error) throw error;
   console.log('The solution is: ', results[0].solution);
