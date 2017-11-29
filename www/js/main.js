@@ -1,7 +1,5 @@
 function sayHello() {
     
-    $("#hello").html("Hello there");
-
     $.ajax({url: "sofor", success: function(result){
         renderSoforok(result);
 
